@@ -1,0 +1,581 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Meu Condomínio</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#f3f6f4; --surface:#ffffff; --ink:#14201d; --muted:#5b6b66; --line:#e1e8e5;
+  --brand:#0f766e; --brand2:#115e59; --brand-ink:#ffffff; --brand-soft:#dcf2ee;
+  --ok:#15803d; --ok-soft:#dcf5e3; --warn:#a15c07; --warn-soft:#fdf0d5;
+  --bad:#b91c1c; --bad-soft:#fde4e4; --info:#1d4ed8; --info-soft:#e2ebfd;
+  --shadow:0 1px 2px rgba(20,32,29,.06),0 4px 14px rgba(20,32,29,.05);
+  box-sizing:border-box;
+  padding-top:env(safe-area-inset-top,0px);
+  padding-bottom:env(safe-area-inset-bottom,0px);
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#0d1412; --surface:#16201d; --ink:#e8f0ed; --muted:#9db0aa; --line:#25332f;
+    --brand:#2dd4bf; --brand2:#0f766e; --brand-ink:#04211d; --brand-soft:#123a35;
+    --ok:#4ade80; --ok-soft:#14331f; --warn:#fbbf24; --warn-soft:#3a2c0c;
+    --bad:#f87171; --bad-soft:#3b1717; --info:#93b4ff; --info-soft:#16264a;
+    --shadow:0 1px 2px rgba(0,0,0,.4);
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#0d1412; --surface:#16201d; --ink:#e8f0ed; --muted:#9db0aa; --line:#25332f;
+  --brand:#2dd4bf; --brand2:#0f766e; --brand-ink:#04211d; --brand-soft:#123a35;
+  --ok:#4ade80; --ok-soft:#14331f; --warn:#fbbf24; --warn-soft:#3a2c0c;
+  --bad:#f87171; --bad-soft:#3b1717; --info:#93b4ff; --info-soft:#16264a;
+  --shadow:0 1px 2px rgba(0,0,0,.4);
+}
+html{scroll-padding-top:env(safe-area-inset-top,0px);-webkit-text-size-adjust:100%}
+*,*::before,*::after{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:'Plus Jakarta Sans',system-ui,-apple-system,'Segoe UI',Roboto,sans-serif;font-size:15px;line-height:1.45}
+#shell{max-width:640px;margin:0 auto;padding:0 14px 96px}
+h1,h2,h3,p{margin:0}
+button{font:inherit;color:inherit}
+.muted{color:var(--muted)} .small{font-size:12.5px}
+.top{position:sticky;top:env(safe-area-inset-top,0px);z-index:20;display:flex;align-items:center;justify-content:space-between;gap:10px;padding:14px 2px 12px;background:var(--bg)}
+.eyebrow{font-size:11.5px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--brand)}
+.top h1{font-size:21px;font-weight:800;letter-spacing:-.01em}
+.pill{border:1px solid var(--line);background:var(--surface);border-radius:999px;padding:8px 12px;font-size:12.5px;font-weight:600;cursor:pointer;white-space:nowrap}
+.banner{background:var(--warn-soft);color:var(--warn);border-radius:12px;padding:10px 12px;font-size:13px;margin-bottom:12px;font-weight:500}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:14px;margin-bottom:12px;box-shadow:var(--shadow)}
+.card h3{font-size:15px;font-weight:700}
+.hero{background:linear-gradient(135deg,var(--brand),var(--brand2));color:var(--brand-ink);border-radius:20px;padding:18px;margin-bottom:12px}
+.hero-l{font-size:12.5px;opacity:.85;font-weight:600}
+.hero-v{font-size:34px;font-weight:800;letter-spacing:-.02em;margin:2px 0 8px}
+.hero-s{display:flex;flex-wrap:wrap;gap:6px 16px;font-size:12.5px;opacity:.92}
+.sec{display:flex;align-items:center;justify-content:space-between;gap:8px;margin:18px 2px 8px}
+.sec h2{font-size:17px;font-weight:800;letter-spacing:-.01em}
+.btn{border:0;background:var(--brand);color:var(--brand-ink);border-radius:12px;padding:11px 16px;font-weight:700;font-size:14px;cursor:pointer}
+.btn.sm{padding:7px 11px;font-size:12.5px;border-radius:10px}
+.btn.ghost{background:transparent;color:var(--ink);border:1px solid var(--line)}
+.btn.soft{background:var(--brand-soft);color:var(--brand)}
+.btn.danger{background:var(--bad-soft);color:var(--bad)}
+.btn.ok{background:var(--ok-soft);color:var(--ok)}
+.btn.block{width:100%}
+.btn:disabled{opacity:.55}
+.chip{display:inline-block;border-radius:999px;padding:3px 9px;font-size:11.5px;font-weight:700;white-space:nowrap}
+.chip.ok{background:var(--ok-soft);color:var(--ok)} .chip.warn{background:var(--warn-soft);color:var(--warn)}
+.chip.bad{background:var(--bad-soft);color:var(--bad)} .chip.info{background:var(--info-soft);color:var(--info)}
+.chip.mute{background:var(--bg);color:var(--muted);border:1px solid var(--line)}
+.row{display:flex;align-items:center;justify-content:space-between;gap:10px}
+.row.top-a{align-items:flex-start}
+.list-item{padding:12px 0;border-bottom:1px solid var(--line)} .list-item:last-child{border-bottom:0;padding-bottom:0} .list-item:first-child{padding-top:0}
+.val{font-weight:800;font-variant-numeric:tabular-nums;white-space:nowrap}
+.val.in{color:var(--ok)} .val.out{color:var(--bad)}
+.seg{display:flex;background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:3px;margin-bottom:12px;gap:2px}
+.seg button{flex:1;border:0;background:transparent;border-radius:9px;padding:9px 4px;font-size:13px;font-weight:700;color:var(--muted);cursor:pointer}
+.seg button.on{background:var(--brand);color:var(--brand-ink)}
+.stat-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:12px}
+.stat{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:12px}
+.stat b{display:block;font-size:20px;font-weight:800}
+.stat span{font-size:12px;color:var(--muted)}
+.empty{text-align:center;padding:26px 12px;color:var(--muted);font-size:14px}
+.empty .em{font-size:30px;display:block;margin-bottom:6px}
+.status-ok{border-left:5px solid var(--ok)} .status-bad{border-left:5px solid var(--bad)} .status-warn{border-left:5px solid var(--warn)}
+.opt{position:relative;display:block;width:100%;text-align:left;border:1px solid var(--line);background:var(--surface);border-radius:12px;padding:11px 12px;margin-top:8px;overflow:hidden;cursor:pointer}
+.opt .bar{position:absolute;inset:0 auto 0 0;background:var(--brand-soft);z-index:0;transition:width .3s}
+.opt .in{position:relative;z-index:1;display:flex;justify-content:space-between;gap:8px;font-weight:600}
+.opt.mine{border-color:var(--brand);box-shadow:inset 0 0 0 1px var(--brand)}
+.opt:disabled{cursor:default}
+details.res{border-top:1px solid var(--line);padding:10px 0}
+details.res:first-of-type{border-top:0}
+details.res summary{cursor:pointer;list-style:none;display:flex;justify-content:space-between;align-items:center;gap:8px}
+details.res summary::-webkit-details-marker{display:none}
+.sub{margin-top:10px;display:grid;gap:8px}
+.sub .r{display:flex;justify-content:space-between;align-items:center;gap:8px;background:var(--bg);border-radius:10px;padding:8px 10px;font-size:13px}
+.acts{display:flex;gap:6px;flex-wrap:wrap}
+nav.tabs{position:fixed;left:0;right:0;bottom:0;z-index:30;background:var(--surface);border-top:1px solid var(--line);display:flex;justify-content:center;padding:6px 6px calc(6px + env(safe-area-inset-bottom,0px))}
+nav.tabs .in{display:flex;width:100%;max-width:640px}
+nav.tabs button{flex:1;border:0;background:transparent;display:flex;flex-direction:column;align-items:center;gap:2px;padding:6px 2px;font-size:11px;font-weight:700;color:var(--muted);cursor:pointer;border-radius:12px}
+nav.tabs button .ic{font-size:20px;line-height:1}
+nav.tabs button.on{color:var(--brand);background:var(--brand-soft)}
+#sheet{position:fixed;inset:0;z-index:50;display:none}
+#sheet.open{display:block}
+.sheet-bg{position:absolute;inset:0;background:rgba(0,0,0,.45)}
+.sheet-card{position:absolute;left:0;right:0;bottom:0;max-width:640px;margin:0 auto;background:var(--surface);border-radius:22px 22px 0 0;padding:10px 16px calc(16px + env(safe-area-inset-bottom,0px));max-height:90%;overflow:auto}
+.grab{width:42px;height:4px;border-radius:4px;background:var(--line);margin:0 auto 12px}
+.sheet-card h3{font-size:18px;font-weight:800;margin-bottom:10px}
+.fields{display:grid;gap:10px;margin:10px 0}
+.field{display:grid;gap:4px;font-size:13px;font-weight:600}
+.field input,.field select,.field textarea{width:100%;font:inherit;font-size:16px;font-weight:400;color:var(--ink);background:var(--bg);border:1px solid var(--line);border-radius:10px;padding:10px 12px}
+.check{display:flex;gap:8px;align-items:center;font-size:14px}
+.req{color:var(--bad)}
+.sheet-actions{display:flex;gap:8px;justify-content:flex-end;margin-top:6px}
+.sheet-actions .btn{flex:1}
+.kv{background:var(--bg);border-radius:12px;padding:10px 12px;margin:8px 0;word-break:break-all;font-weight:600}
+.kv small{display:block;font-weight:500;color:var(--muted);margin-bottom:2px}
+#toast{position:fixed;left:50%;transform:translateX(-50%);bottom:calc(84px + env(safe-area-inset-bottom,0px));background:var(--ink);color:var(--bg);padding:10px 16px;border-radius:12px;font-size:13.5px;font-weight:600;z-index:60;opacity:0;pointer-events:none;transition:opacity .2s;max-width:88%;text-align:center}
+#toast.show{opacity:1}
+.pin{color:var(--warn);font-weight:700;font-size:12px}
+a{color:var(--brand)}
+@media (min-width:700px){#shell{padding-top:8px}}
+</style>
+</head>
+<body>
+<div id="shell">
+  <div id="app"></div>
+</div>
+<nav class="tabs"><div class="in" id="tabs"></div></nav>
+<div id="sheet"></div>
+<div id="toast"></div>
+
+<script>
+(function(){
+'use strict';
+/* ---------- utilidades ---------- */
+const $ = s => document.querySelector(s);
+const esc = s => String(s == null ? '' : s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const brl = n => Number(n || 0).toLocaleString('pt-BR', {style:'currency', currency:'BRL'});
+const pad = n => String(n).padStart(2, '0');
+const today = () => { const d = new Date(); return d.getFullYear() + '-' + pad(d.getMonth()+1) + '-' + pad(d.getDate()); };
+const thisMonth = () => today().slice(0,7);
+const fdate = iso => iso ? String(iso).split('-').reverse().join('/') : '';
+const MESES = ['Janeiro','Fevereiro','Março','Abril','Maio','Junho','Julho','Agosto','Setembro','Outubro','Novembro','Dezembro'];
+const monthLabel = ym => { const p = String(ym).split('-'); return (MESES[(+p[1])-1] || ym) + '/' + p[0]; };
+const newId = () => Date.now().toString(36) + Math.random().toString(36).slice(2, 6);
+const parseMoney = s => {
+  s = String(s || '').trim().replace(/[^\d.,-]/g, '');
+  if (s.indexOf(',') >= 0) s = s.replace(/\./g, '').replace(',', '.');
+  const n = parseFloat(s);
+  return isNaN(n) ? NaN : Math.round(n * 100) / 100;
+};
+const CATS = ['Manutenção','Limpeza','Segurança','Água e energia','Obras e reformas','Administrativo','Outros'];
+
+/* ---------- estado ---------- */
+let db = null, user = null, uid = null;
+let isAdmin = false, canWrite = true, viewAs = 'morador';
+const V = { tab:'inicio', contas:'caixa', part:'enquetes' };
+const S = { avisos:[], notas:[], orcs:[], enquetes:[], sugestoes:[], apoios:[], ledger:[], charges:[],
+            votes:[], residents:[], myPays:[], allPays:{}, me:null, cfg:{}, loadingPays:false };
+const openRes = new Set();
+const isStaff = () => isAdmin && viewAs === 'sindico';
+
+let raf = 0;
+const sched = () => { cancelAnimationFrame(raf); raf = requestAnimationFrame(render); };
+
+function toast(msg){
+  const t = $('#toast'); t.textContent = msg; t.classList.add('show');
+  clearTimeout(toast._t); toast._t = setTimeout(() => t.classList.remove('show'), 2800);
+}
+async function run(fn, okMsg){
+  try { await fn(); if (okMsg) toast(okMsg); return true; }
+  catch(e){
+    console.error(e);
+    const c = e && e.code;
+    toast(c === 'invalid_argument' ? 'Seu acesso não permite essa ação.' :
+          c === 'quota_exceeded' ? 'Limite do banco de dados atingido.' :
+          'Não foi possível salvar. Tente de novo.');
+    return false;
+  }
+}
+const needDb = () => { if (!db) { toast('Banco de dados indisponível nesta visualização.'); return false; } return true; };
+
+/* ---------- cálculos ---------- */
+const saldoCaixa = () => S.ledger.reduce((a, t) => a + (t.type === 'entrada' ? 1 : -1) * (+t.amount || 0), 0);
+function monthSums(){
+  const m = thisMonth(); let i = 0, o = 0;
+  S.ledger.forEach(t => { if (String(t.date || '').slice(0,7) === m) { if (t.type === 'entrada') i += +t.amount||0; else o += +t.amount||0; } });
+  return { in:i, out:o };
+}
+function chargeStatus(c, pay){
+  if (pay && pay.status === 'pago') return 'pago';
+  if (pay && pay.status === 'aguardando') return 'aguardando';
+  return (c.due && c.due < today()) ? 'atrasado' : 'aberto';
+}
+const statusChip = s => s === 'pago' ? '<span class="chip ok">Pago</span>' :
+  s === 'aguardando' ? '<span class="chip info">Aguardando confirmação</span>' :
+  s === 'atrasado' ? '<span class="chip bad">Em atraso</span>' : '<span class="chip warn">Em aberto</span>';
+function mySummary(){
+  const map = {}; S.myPays.forEach(p => map[p.id] = p);
+  let debt = 0, nOver = 0, nAwait = 0, nOpen = 0;
+  S.charges.forEach(c => {
+    const st = chargeStatus(c, map[c.id]);
+    if (st === 'atrasado'){ debt += +c.amount||0; nOver++; }
+    else if (st === 'aguardando') nAwait++;
+    else if (st === 'aberto') nOpen++;
+  });
+  return { debt, nOver, nAwait, nOpen, map };
+}
+function residentSummary(r){
+  const map = {}; (S.allPays[r.id] || []).forEach(p => map[p.id] = p);
+  let debt = 0, nOver = 0, nAwait = 0; const pend = [];
+  S.charges.forEach(c => {
+    const st = chargeStatus(c, map[c.id]);
+    if (st === 'atrasado'){ debt += +c.amount||0; nOver++; pend.push({c, st}); }
+    else if (st === 'aguardando'){ nAwait++; pend.push({c, st}); }
+    else if (st === 'aberto'){ pend.push({c, st}); }
+  });
+  return { debt, nOver, nAwait, pend };
+}
+
+/* ---------- renderização ---------- */
+const TABS = [['inicio','🏠','Início'],['mural','📢','Mural'],['contas','📊','Contas'],['participar','🗳️','Votar'],['taxa','💳','Taxa']];
+
+function header(){
+  return `<header class="top"><div><div class="eyebrow">${isStaff() ? 'Painel do síndico' : 'Área do morador'}</div><h1>${esc(S.cfg.name || 'Meu Condomínio')}</h1></div>
+  ${isAdmin ? `<button class="pill" data-act="toggleRole">${isStaff() ? '👁 Ver como morador' : '🛠 Voltar ao síndico'}</button>` : ''}</header>`;
+}
+const sec = (title, btn) => `<div class="sec"><h2>${esc(title)}</h2>${btn || ''}</div>`;
+const addBtn = (act, label) => isStaff() ? `<button class="btn sm" data-act="${act}">+ ${esc(label)}</button>` : '';
+const empty = (em, txt) => `<div class="empty"><span class="em">${em}</span>${esc(txt)}</div>`;
+
+function render(){
+  const tabsEl = $('#tabs');
+  tabsEl.innerHTML = TABS.map(t => `<button class="${V.tab === t[0] ? 'on' : ''}" data-act="tab" data-val="${t[0]}"><span class="ic">${t[1]}</span>${t[2]}</button>`).join('');
+  let body = '';
+  if (!db) body += `<div class="banner">Banco de dados indisponível nesta visualização. Abra o link estando logado para ver e registrar dados.</div>`;
+  else if (!canWrite && !isAdmin) body += `<div class="banner">Seu acesso é somente leitura. Peça ao síndico para liberar acesso de colaborador para votar e pagar.</div>`;
+  body += V.tab === 'inicio' ? vInicio() : V.tab === 'mural' ? vMural() : V.tab === 'contas' ? vContas() : V.tab === 'participar' ? vPart() : vTaxa();
+  $('#app').innerHTML = header() + body;
+}
+
+/* ----- Início ----- */
+function vInicio(){
+  const m = monthSums();
+  let status = '';
+  if (isStaff()){
+    let aguard = 0, deb = 0;
+    S.residents.forEach(r => { const x = residentSummary(r); aguard += x.nAwait; deb += x.debt; });
+    status = `<div class="stat-grid"><div class="stat"><b>${S.residents.length}</b><span>Moradores cadastrados</span></div>
+      <div class="stat"><b>${aguard}</b><span>Pagamentos a confirmar</span></div>
+      <div class="stat" style="grid-column:span 2"><b style="color:var(--bad)">${brl(deb)}</b><span>Inadimplência total</span></div></div>`;
+  } else if (!S.me){
+    status = `<div class="card status-warn"><h3>Complete seu cadastro</h3><p class="muted small" style="margin:4px 0 10px">Informe seu nome e unidade para acompanhar suas taxas.</p><button class="btn sm" data-act="tab" data-val="taxa">Cadastrar agora</button></div>`;
+  } else {
+    const s = mySummary();
+    if (s.nOver) status = `<div class="card status-bad"><div class="row"><div><h3>Você tem pendências</h3><p class="muted small">${s.nOver} taxa(s) em atraso</p></div><div class="val out">${brl(s.debt)}</div></div><button class="btn sm" style="margin-top:10px" data-act="tab" data-val="taxa">Ver e pagar</button></div>`;
+    else if (s.nAwait) status = `<div class="card status-warn"><h3>Pagamento em análise</h3><p class="muted small">O síndico está confirmando ${s.nAwait} pagamento(s).</p></div>`;
+    else status = `<div class="card status-ok"><h3>✅ Você está em dia</h3><p class="muted small">Nenhuma taxa em atraso.${s.nOpen ? ' Há ' + s.nOpen + ' taxa(s) em aberto a vencer.' : ''}</p></div>`;
+  }
+  const abertas = S.enquetes.filter(p => p.open !== false).length;
+  const orcA = S.orcs.filter(o => (o.status || 'analise') === 'analise').length;
+  return `<section class="hero"><div class="hero-l">Saldo em caixa</div><div class="hero-v">${brl(saldoCaixa())}</div>
+    <div class="hero-s"><span>↑ ${brl(m.in)} entradas no mês</span><span>↓ ${brl(m.out)} saídas no mês</span></div></section>
+    ${status}
+    ${sec('Últimos avisos', `<button class="pill" data-act="tab" data-val="mural">Ver todos</button>`)}
+    ${S.avisos.length ? S.avisos.slice(0, 2).map(avisoCard).join('') : `<div class="card">${empty('📢','Nenhum aviso publicado ainda.')}</div>`}
+    <div class="stat-grid">
+      <button class="stat" style="text-align:left;cursor:pointer" data-act="goPart"><b>${abertas}</b><span>Enquete(s) aberta(s)</span></button>
+      <button class="stat" style="text-align:left;cursor:pointer" data-act="goOrc"><b>${orcA}</b><span>Orçamento(s) em análise</span></button>
+    </div>`;
+}
+
+/* ----- Mural ----- */
+function avisoCard(a){
+  return `<div class="card"><div class="row top-a"><div><h3>${a.pinned ? '📌 ' : ''}${esc(a.title)}</h3><p class="muted small">${fdate(a.date)}</p></div>
+    ${isStaff() ? `<div class="acts"><button class="btn sm ghost" data-act="pinAviso" data-id="${a.id}">${a.pinned ? 'Desafixar' : 'Fixar'}</button><button class="btn sm danger" data-act="delAviso" data-id="${a.id}">Excluir</button></div>` : ''}</div>
+    <p style="margin-top:8px;white-space:pre-wrap">${esc(a.body)}</p></div>`;
+}
+function vMural(){
+  const list = S.avisos.slice().sort((a, b) => (b.pinned ? 1 : 0) - (a.pinned ? 1 : 0) || (b.ts || 0) - (a.ts || 0));
+  return sec('Mural de avisos', addBtn('addAviso', 'Aviso')) + (list.length ? list.map(avisoCard).join('') : `<div class="card">${empty('📢','Nenhum aviso por aqui.')}</div>`);
+}
+
+/* ----- Contas ----- */
+function vContas(){
+  const seg = `<div class="seg">${[['caixa','Caixa'],['notas','Notas'],['orc','Orçamentos']].map(x => `<button class="${V.contas === x[0] ? 'on' : ''}" data-act="seg" data-group="contas" data-val="${x[0]}">${x[1]}</button>`).join('')}</div>`;
+  return sec('Prestação de contas') + seg + (V.contas === 'caixa' ? vCaixa() : V.contas === 'notas' ? vNotas() : vOrc());
+}
+function vCaixa(){
+  const m = monthSums();
+  const list = S.ledger.slice().sort((a, b) => String(b.date).localeCompare(String(a.date)) || (b.ts || 0) - (a.ts || 0));
+  return `<section class="hero"><div class="hero-l">Valor em caixa</div><div class="hero-v">${brl(saldoCaixa())}</div>
+    <div class="hero-s"><span>↑ ${brl(m.in)} no mês</span><span>↓ ${brl(m.out)} no mês</span></div></section>
+    ${sec('Movimentações', addBtn('addLanc', 'Lançamento'))}
+    <div class="card">${list.length ? list.map(t => `<div class="list-item row"><div><b>${t.type === 'entrada' ? '↑' : '↓'} ${esc(t.desc)}</b><div class="muted small">${fdate(t.date)}</div></div>
+      <div class="row" style="gap:8px"><span class="val ${t.type === 'entrada' ? 'in' : 'out'}">${t.type === 'entrada' ? '+' : '−'}${brl(t.amount)}</span>${isStaff() ? `<button class="btn sm danger" data-act="delLanc" data-id="${t.id}" aria-label="Excluir">✕</button>` : ''}</div></div>`).join('') : empty('💰','Nenhuma movimentação registrada.')}</div>`;
+}
+function vNotas(){
+  const list = S.notas.slice().sort((a, b) => String(b.date).localeCompare(String(a.date)) || (b.ts || 0) - (a.ts || 0));
+  const total = list.reduce((a, n) => a + (+n.amount || 0), 0);
+  return `<div class="stat-grid"><div class="stat"><b>${list.length}</b><span>Notas registradas</span></div><div class="stat"><b>${brl(total)}</b><span>Total pago</span></div></div>
+    ${sec('Notas dos serviços pagos', addBtn('addNota', 'Nota'))}
+    ${list.length ? list.map(n => `<div class="card"><div class="row top-a"><div><h3>${esc(n.title)}</h3><p class="muted small">${esc(n.supplier || '')}${n.supplier ? ' · ' : ''}${fdate(n.date)}</p></div><span class="val">${brl(n.amount)}</span></div>
+      <div class="row" style="margin-top:8px"><span class="chip mute">${esc(n.category || 'Outros')}</span>
+      <div class="acts">${n.link ? `<a class="btn sm soft" style="text-decoration:none" href="${esc(n.link)}" target="_blank" rel="noopener noreferrer">Ver nota</a>` : ''}${isStaff() ? `<button class="btn sm danger" data-act="delNota" data-id="${n.id}">Excluir</button>` : ''}</div></div></div>`).join('') : `<div class="card">${empty('🧾','Nenhuma nota registrada.')}</div>`}`;
+}
+function vOrc(){
+  const groups = {};
+  S.orcs.forEach(o => { const k = String(o.service || '').trim().toLowerCase(); (groups[k] = groups[k] || []).push(o); });
+  const keys = Object.keys(groups);
+  return sec('Orçamentos de serviços', addBtn('addOrc', 'Orçamento')) +
+    (keys.length ? keys.map(k => {
+      const items = groups[k].slice().sort((a, b) => (+a.amount||0) - (+b.amount||0));
+      const min = items.length > 1 ? +items[0].amount : null;
+      return `<div class="card"><h3>${esc(items[0].service)}</h3><div style="margin-top:8px">${items.map(o => {
+        const st = o.status || 'analise';
+        const chip = st === 'aprovado' ? '<span class="chip ok">Aprovado</span>' : st === 'recusado' ? '<span class="chip bad">Recusado</span>' : '<span class="chip warn">Em análise</span>';
+        return `<div class="list-item"><div class="row top-a"><div><b>${esc(o.supplier)}</b><div class="muted small">${o.prazo ? 'Prazo: ' + esc(o.prazo) : ''}${o.obs ? (o.prazo ? ' · ' : '') + esc(o.obs) : ''}</div></div>
+          <div style="text-align:right"><div class="val">${brl(o.amount)}</div>${min !== null && +o.amount === min ? '<span class="chip info">Menor valor</span>' : ''}</div></div>
+          <div class="row" style="margin-top:8px">${chip}${isStaff() ? `<div class="acts"><button class="btn sm ok" data-act="orcSt" data-id="${o.id}" data-val="aprovado">Aprovar</button><button class="btn sm ghost" data-act="orcSt" data-id="${o.id}" data-val="recusado">Recusar</button><button class="btn sm danger" data-act="delOrc" data-id="${o.id}">✕</button></div>` : ''}</div></div>`;
+      }).join('')}</div></div>`;
+    }).join('') : `<div class="card">${empty('📋','Nenhum orçamento cadastrado.')}</div>`);
+}
+
+/* ----- Participar (enquetes + sugestões) ----- */
+function voteData(){
+  const mine = {}; const counts = {};
+  S.votes.forEach(v => {
+    Object.keys(v.data).forEach(pid => { const i = v.data[pid]; counts[pid] = counts[pid] || {}; counts[pid][i] = (counts[pid][i] || 0) + 1; });
+    if (v.uid === uid) Object.assign(mine, v.data);
+  });
+  return { mine, counts };
+}
+function vPart(){
+  const seg = `<div class="seg">${[['enquetes','Enquetes'],['sugestoes','Melhorias']].map(x => `<button class="${V.part === x[0] ? 'on' : ''}" data-act="seg" data-group="part" data-val="${x[0]}">${x[1]}</button>`).join('')}</div>`;
+  return sec('Participe') + seg + (V.part === 'enquetes' ? vEnquetes() : vSugestoes());
+}
+function vEnquetes(){
+  const vd = voteData();
+  const list = S.enquetes.slice().sort((a, b) => (b.ts || 0) - (a.ts || 0));
+  return sec('Enquetes', addBtn('addEnq', 'Enquete')) + (list.length ? list.map(p => {
+    const open = p.open !== false; const c = vd.counts[p.id] || {};
+    const total = (p.options || []).reduce((a, _, i) => a + (c[i] || 0), 0);
+    const mine = vd.mine[p.id];
+    return `<div class="card"><div class="row top-a"><h3>${esc(p.question)}</h3>${open ? '<span class="chip ok">Aberta</span>' : '<span class="chip mute">Encerrada</span>'}</div>
+      ${(p.options || []).map((o, i) => { const n = c[i] || 0; const pct = total ? Math.round(n * 100 / total) : 0;
+        return `<button class="opt ${mine === i ? 'mine' : ''}" data-act="vote" data-id="${p.id}" data-val="${i}" ${open && uid ? '' : 'disabled'}><span class="bar" style="width:${pct}%"></span><span class="in"><span>${mine === i ? '✓ ' : ''}${esc(o)}</span><span>${pct}% · ${n}</span></span></button>`; }).join('')}
+      <div class="row" style="margin-top:10px"><span class="muted small">${total} voto(s)${mine !== undefined ? ' · você já votou' : ''}</span>
+      ${isStaff() ? `<div class="acts"><button class="btn sm ghost" data-act="toggleEnq" data-id="${p.id}">${open ? 'Encerrar' : 'Reabrir'}</button><button class="btn sm danger" data-act="delEnq" data-id="${p.id}">Excluir</button></div>` : ''}</div></div>`;
+  }).join('') : `<div class="card">${empty('🗳️','Nenhuma enquete criada ainda.')}</div>`);
+}
+function vSugestoes(){
+  const cnt = {}; const mineA = {};
+  S.apoios.forEach(a => { cnt[a.sid] = (cnt[a.sid] || 0) + 1; if (a.uid === uid) mineA[a.sid] = true; });
+  const list = S.sugestoes.slice().sort((a, b) => (cnt[b.id] || 0) - (cnt[a.id] || 0) || (b.ts || 0) - (a.ts || 0));
+  const stChip = s => s === 'aprovada' ? '<span class="chip ok">Aprovada</span>' : s === 'analise' ? '<span class="chip warn">Em análise</span>' : s === 'recusada' ? '<span class="chip bad">Recusada</span>' : '<span class="chip info">Nova</span>';
+  return sec('Ideias para melhorar o condomínio', `<button class="btn sm" data-act="addSug">+ Sugerir</button>`) + (list.length ? list.map(s => `
+    <div class="card"><div class="row top-a"><div><h3>${esc(s.title)}</h3><p class="muted small">${esc(s.authorName || 'Morador')} · ${fdate(s.date)}</p></div>${stChip(s.status)}</div>
+    <p style="margin-top:8px;white-space:pre-wrap">${esc(s.text)}</p>
+    <div class="row" style="margin-top:10px"><button class="btn sm ${mineA[s.id] ? '' : 'soft'}" data-act="apoiar" data-id="${s.id}">👍 ${mineA[s.id] ? 'Apoiado' : 'Apoiar'} · ${cnt[s.id] || 0}</button>
+    <div class="acts">${isStaff() ? `<button class="btn sm ghost" data-act="sugSt" data-id="${s.id}">Status</button>` : ''}${(isStaff() || s.authorId === uid) ? `<button class="btn sm danger" data-act="delSug" data-id="${s.id}">Excluir</button>` : ''}</div></div></div>`).join('') : `<div class="card">${empty('💡','Ainda não há sugestões. Seja o primeiro!')}</div>`);
+}
+
+/* ----- Taxa ----- */
+function vTaxa(){ return isStaff() ? vTaxaStaff() : vTaxaMorador(); }
+function vTaxaMorador(){
+  if (!S.me) return sec('Minha taxa') + `<div class="card"><h3>Cadastro do morador</h3><p class="muted small" style="margin:4px 0 12px">Informe seus dados uma vez para acompanhar e pagar a taxa do condomínio.</p><button class="btn block" data-act="cadastro">Cadastrar meus dados</button></div>`;
+  const s = mySummary();
+  const list = S.charges.slice().sort((a, b) => b.id.localeCompare(a.id));
+  return sec('Minha taxa', `<button class="pill" data-act="cadastro">✏️ Meus dados</button>`) +
+    `<div class="card"><p class="muted small">${esc(S.me.name)} · ${esc(S.me.unit)}</p>
+     <div class="row" style="margin-top:6px"><h3>${s.nOver ? 'Total em atraso' : 'Situação'}</h3>${s.nOver ? `<span class="val out">${brl(s.debt)}</span>` : '<span class="chip ok">Em dia</span>'}</div></div>` +
+    sec('Taxas') + (list.length ? list.map(c => {
+      const p = s.map[c.id]; const st = chargeStatus(c, p);
+      return `<div class="card ${st === 'pago' ? 'status-ok' : st === 'atrasado' ? 'status-bad' : st === 'aguardando' ? 'status-warn' : ''}"><div class="row top-a"><div><h3>${monthLabel(c.id)}</h3><p class="muted small">Vencimento ${fdate(c.due)}</p></div><span class="val">${brl(c.amount)}</span></div>
+        <div class="row" style="margin-top:10px">${statusChip(st)}${st === 'pago' ? `<span class="muted small">em ${fdate(p.paidAt)}</span>` : (st === 'aguardando' ? '' : `<button class="btn sm" data-act="pagar" data-id="${c.id}">Pagar</button>`)}</div></div>`;
+    }).join('') : `<div class="card">${empty('💳','O síndico ainda não lançou taxas.')}</div>`);
+}
+function vTaxaStaff(){
+  const res = S.residents.slice().sort((a, b) => String(a.unit).localeCompare(String(b.unit), 'pt-BR', {numeric:true}));
+  const charges = S.charges.slice().sort((a, b) => b.id.localeCompare(a.id));
+  return sec('Gestão de taxas', `<button class="pill" data-act="refreshPays">${S.loadingPays ? 'Atualizando…' : '↻ Atualizar'}</button>`) +
+    `<div class="acts" style="margin-bottom:12px"><button class="btn sm" data-act="addCharge">+ Lançar taxa do mês</button><button class="btn sm ghost" data-act="cfg">⚙️ Condomínio e Pix</button></div>` +
+    sec('Moradores') + `<div class="card">${res.length ? res.map(r => {
+      const x = residentSummary(r);
+      const chip = x.nAwait ? `<span class="chip info">${x.nAwait} a confirmar</span>` : x.nOver ? `<span class="chip bad">${x.nOver} em atraso · ${brl(x.debt)}</span>` : '<span class="chip ok">Em dia</span>';
+      return `<details class="res" data-rid="${r.id}" ${openRes.has(r.id) ? 'open' : ''}><summary><div><b>${esc(r.name)}</b><div class="muted small">${esc(r.unit)}</div></div>${chip}</summary>
+        <div class="sub">${x.pend.length ? x.pend.map(({c, st}) => `<div class="r"><div><b>${monthLabel(c.id)}</b> · ${brl(c.amount)}<div class="muted small">${st === 'atrasado' ? 'Em atraso' : st === 'aguardando' ? 'Aguardando confirmação' : 'Em aberto'}</div></div>
+          <div class="acts">${st === 'aguardando' ? `<button class="btn sm ok" data-act="confirmPay" data-rid="${r.id}" data-id="${c.id}">Confirmar</button><button class="btn sm danger" data-act="rejectPay" data-rid="${r.id}" data-id="${c.id}">Recusar</button>` : `<button class="btn sm ghost" data-act="confirmPay" data-rid="${r.id}" data-id="${c.id}">Dar baixa</button>`}</div></div>`).join('') : '<div class="muted small">Sem pendências.</div>'}</div></details>`;
+    }).join('') : empty('🏘️', 'Nenhum morador cadastrou seus dados ainda.')}</div>` +
+    sec('Taxas lançadas') + `<div class="card">${charges.length ? charges.map(c => `<div class="list-item row"><div><b>${monthLabel(c.id)}</b><div class="muted small">Vence ${fdate(c.due)}</div></div><div class="row" style="gap:8px"><span class="val">${brl(c.amount)}</span><button class="btn sm danger" data-act="delCharge" data-id="${c.id}">✕</button></div></div>`).join('') : empty('🧾', 'Nenhuma taxa lançada.')}</div>`;
+}
+
+/* ---------- formulário em bottom sheet ---------- */
+function fieldHtml(f){
+  const v = f.value == null ? '' : f.value; const req = f.required ? ' <span class="req">*</span>' : '';
+  if (f.type === 'checkbox') return `<label class="check"><input type="checkbox" name="${f.k}" ${f.value ? 'checked' : ''}> <span>${esc(f.label)}</span></label>`;
+  let inp;
+  if (f.type === 'textarea') inp = `<textarea name="${f.k}" rows="4" placeholder="${esc(f.placeholder || '')}">${esc(v)}</textarea>`;
+  else if (f.type === 'select') inp = `<select name="${f.k}">${f.options.map(o => `<option value="${esc(o[0])}" ${o[0] === v ? 'selected' : ''}>${esc(o[1])}</option>`).join('')}</select>`;
+  else inp = `<input name="${f.k}" type="${f.type === 'money' ? 'text' : (f.type || 'text')}" ${f.type === 'money' ? 'inputmode="decimal"' : ''} value="${esc(v)}" placeholder="${esc(f.placeholder || '')}" autocomplete="off">`;
+  return `<label class="field"><span>${esc(f.label)}${req}</span>${inp}</label>`;
+}
+function openSheet(o){
+  const el = $('#sheet');
+  el.innerHTML = `<div class="sheet-bg" data-act="close"></div><div class="sheet-card"><div class="grab"></div><h3>${esc(o.title)}</h3>
+    ${o.note ? `<p class="muted small">${o.note}</p>` : ''}${o.html || ''}
+    <div class="fields">${(o.fields || []).map(fieldHtml).join('')}</div>
+    <div class="sheet-actions"><button class="btn ghost" data-act="close">Cancelar</button>${o.onSubmit ? `<button class="btn" id="sheetOk">${esc(o.submit || 'Salvar')}</button>` : ''}</div></div>`;
+  el.classList.add('open');
+  const ok = $('#sheetOk'); if (!ok) return;
+  ok.onclick = async () => {
+    const v = {};
+    for (const f of (o.fields || [])){
+      const inp = el.querySelector('[name="' + f.k + '"]');
+      let val = f.type === 'checkbox' ? inp.checked : inp.value.trim();
+      if (f.type === 'money') val = parseMoney(val);
+      if (f.required && (val === '' || (f.type === 'money' && isNaN(val)))) { toast('Preencha: ' + f.label); return; }
+      if (f.type === 'month' && val && !/^\d{4}-\d{2}$/.test(val)) { toast('Use o formato AAAA-MM'); return; }
+      v[f.k] = val;
+    }
+    ok.disabled = true;
+    const done = await run(() => o.onSubmit(v), o.okMsg);
+    ok.disabled = false;
+    if (done) closeSheet();
+  };
+}
+const closeSheet = () => { const el = $('#sheet'); el.classList.remove('open'); el.innerHTML = ''; };
+
+/* ---------- ações ---------- */
+function loadAllPays(){
+  if (!db || !isStaff()) return Promise.resolve();
+  S.loadingPays = true; sched();
+  return Promise.all(S.residents.map(async r => {
+    try { const s = await db.collection('payments/' + r.id + '/items').get(); S.allPays[r.id] = s.docs.map(d => ({id:d.id, ...d.data()})); }
+    catch(e){ console.error(e); }
+  })).then(() => { S.loadingPays = false; sched(); });
+}
+const ACT = {
+  close: closeSheet,
+  tab(t){ V.tab = t.dataset.val; if (V.tab === 'taxa' && isStaff()) loadAllPays(); render(); window.scrollTo(0, 0); },
+  seg(t){ V[t.dataset.group] = t.dataset.val; render(); },
+  goPart(){ V.tab = 'participar'; V.part = 'enquetes'; render(); window.scrollTo(0,0); },
+  goOrc(){ V.tab = 'contas'; V.contas = 'orc'; render(); window.scrollTo(0,0); },
+  toggleRole(){ viewAs = isStaff() ? 'morador' : 'sindico'; if (isStaff()) loadAllPays(); render(); },
+  refreshPays(){ loadAllPays(); },
+
+  addAviso(){ if (!needDb()) return; openSheet({ title:'Novo aviso', submit:'Publicar', okMsg:'Aviso publicado',
+    fields:[{k:'title',label:'Título',required:true},{k:'body',label:'Mensagem',type:'textarea',required:true},{k:'pinned',label:'Fixar no topo',type:'checkbox'}],
+    onSubmit: v => db.doc('avisos/' + newId()).set({ title:v.title, body:v.body, pinned:v.pinned, date:today(), ts:Date.now() }) }); },
+  pinAviso(t){ const a = S.avisos.find(x => x.id === t.dataset.id); if (a) run(() => db.doc('avisos/' + a.id).update({ pinned: !a.pinned })); },
+  delAviso(t){ if (confirm('Excluir este aviso?')) run(() => db.doc('avisos/' + t.dataset.id).delete(), 'Aviso excluído'); },
+
+  addLanc(){ if (!needDb()) return; openSheet({ title:'Novo lançamento', okMsg:'Lançamento salvo',
+    fields:[{k:'type',label:'Tipo',type:'select',options:[['entrada','Entrada'],['saida','Saída']],value:'entrada'},{k:'desc',label:'Descrição',required:true},{k:'amount',label:'Valor (R$)',type:'money',required:true,placeholder:'0,00'},{k:'date',label:'Data',type:'date',value:today(),required:true}],
+    onSubmit: v => db.doc('ledger/' + newId()).set({ type:v.type, desc:v.desc, amount:v.amount, date:v.date, ts:Date.now() }) }); },
+  delLanc(t){ if (confirm('Excluir este lançamento? O saldo será recalculado.')) run(() => db.doc('ledger/' + t.dataset.id).delete(), 'Lançamento excluído'); },
+
+  addNota(){ if (!needDb()) return; openSheet({ title:'Registrar nota', okMsg:'Nota registrada',
+    fields:[{k:'title',label:'Serviço',required:true,placeholder:'Ex.: Manutenção do portão'},{k:'supplier',label:'Fornecedor'},
+      {k:'category',label:'Categoria',type:'select',options:CATS.map(c => [c, c]),value:'Manutenção'},
+      {k:'amount',label:'Valor (R$)',type:'money',required:true,placeholder:'0,00'},{k:'date',label:'Data',type:'date',value:today(),required:true},
+      {k:'link',label:'Link da nota (opcional)',type:'url',placeholder:'https://…'},{k:'lanc',label:'Lançar como saída no caixa',type:'checkbox',value:true}],
+    onSubmit: async v => { const id = newId(); const link = /^https?:\/\//i.test(v.link) ? v.link : '';
+      await db.doc('notas/' + id).set({ title:v.title, supplier:v.supplier, category:v.category, amount:v.amount, date:v.date, link, ts:Date.now() });
+      if (v.lanc) await db.doc('ledger/tx_nota_' + id).set({ type:'saida', desc:v.title, amount:v.amount, date:v.date, ts:Date.now() }); } }); },
+  delNota(t){ if (!confirm('Excluir esta nota e o lançamento de saída vinculado?')) return;
+    run(async () => { await db.doc('notas/' + t.dataset.id).delete(); await db.doc('ledger/tx_nota_' + t.dataset.id).delete(); }, 'Nota excluída'); },
+
+  addOrc(){ if (!needDb()) return; openSheet({ title:'Novo orçamento', note:'Use o mesmo nome de serviço para comparar fornecedores.', okMsg:'Orçamento salvo',
+    fields:[{k:'service',label:'Serviço',required:true,placeholder:'Ex.: Pintura da fachada'},{k:'supplier',label:'Fornecedor',required:true},{k:'amount',label:'Valor (R$)',type:'money',required:true,placeholder:'0,00'},{k:'prazo',label:'Prazo de execução'},{k:'obs',label:'Observações'}],
+    onSubmit: v => db.doc('orcamentos/' + newId()).set({ service:v.service, supplier:v.supplier, amount:v.amount, prazo:v.prazo, obs:v.obs, status:'analise', ts:Date.now() }) }); },
+  orcSt(t){ run(() => db.doc('orcamentos/' + t.dataset.id).update({ status:t.dataset.val })); },
+  delOrc(t){ if (confirm('Excluir este orçamento?')) run(() => db.doc('orcamentos/' + t.dataset.id).delete()); },
+
+  addEnq(){ if (!needDb()) return; openSheet({ title:'Nova enquete', okMsg:'Enquete criada',
+    fields:[{k:'q',label:'Pergunta',required:true,placeholder:'Ex.: Instalar câmeras na garagem?'},{k:'opts',label:'Opções (uma por linha, de 2 a 6)',type:'textarea',required:true,value:'Sim\nNão'}],
+    onSubmit: async v => { const opts = v.opts.split('\n').map(s => s.trim()).filter(Boolean).slice(0, 6);
+      if (opts.length < 2) { toast('Informe ao menos 2 opções.'); throw new Error('opts'); }
+      await db.doc('enquetes/' + newId()).set({ question:v.q, options:opts, open:true, ts:Date.now() }); } }); },
+  vote(t){ if (!uid || !needDb()) return; const pid = t.dataset.id; const mine = voteData().mine;
+    run(() => db.doc('votes/' + uid).set({ ...mine, [pid]: +t.dataset.val }), 'Voto registrado'); },
+  toggleEnq(t){ const p = S.enquetes.find(x => x.id === t.dataset.id); if (p) run(() => db.doc('enquetes/' + p.id).update({ open: p.open === false })); },
+  delEnq(t){ if (confirm('Excluir esta enquete?')) run(() => db.doc('enquetes/' + t.dataset.id).delete()); },
+
+  addSug(){ if (!needDb()) return; openSheet({ title:'Sugerir melhoria', okMsg:'Sugestão enviada',
+    fields:[{k:'title',label:'Título',required:true,placeholder:'Ex.: Horta comunitária'},{k:'text',label:'Descreva sua ideia',type:'textarea',required:true}].concat(S.me ? [] : [{k:'name',label:'Seu nome (opcional)'}]),
+    onSubmit: v => db.doc('sugestoes/' + newId()).set({ title:v.title, text:v.text, authorName:(S.me && S.me.name) || v.name || 'Morador', authorId:uid || '', status:'nova', date:today(), ts:Date.now() }) }); },
+  apoiar(t){ if (!uid || !needDb()) return; const sid = t.dataset.id; const ref = db.doc('apoios/' + sid + '_' + uid);
+    const has = S.apoios.some(a => a.sid === sid && a.uid === uid);
+    run(() => has ? ref.delete() : ref.set({ sid, uid })); },
+  sugSt(t){ const id = t.dataset.id; openSheet({ title:'Status da sugestão', okMsg:'Status atualizado',
+    fields:[{k:'st',label:'Status',type:'select',options:[['nova','Nova'],['analise','Em análise'],['aprovada','Aprovada'],['recusada','Recusada']],value:(S.sugestoes.find(s => s.id === id) || {}).status || 'nova'}],
+    onSubmit: v => db.doc('sugestoes/' + id).update({ status:v.st }) }); },
+  delSug(t){ if (confirm('Excluir esta sugestão?')) run(() => db.doc('sugestoes/' + t.dataset.id).delete()); },
+
+  cadastro(){ if (!needDb() || !uid) return; openSheet({ title:'Meus dados', okMsg:'Dados salvos',
+    fields:[{k:'name',label:'Nome completo',required:true,value:S.me ? S.me.name : ''},{k:'unit',label:'Unidade (bloco/apto ou casa)',required:true,value:S.me ? S.me.unit : '',placeholder:'Ex.: Bloco B, Apto 203'}],
+    onSubmit: v => db.doc('residents/' + uid).set({ name:v.name, unit:v.unit, ts:Date.now() }) }); },
+  pagar(t){
+    const c = S.charges.find(x => x.id === t.dataset.id); if (!c || !needDb()) return;
+    const ref = (S.me.unit + ' ' + c.id).toUpperCase();
+    openSheet({ title:'Pagar ' + monthLabel(c.id),
+      html:`<div class="kv"><small>Valor</small>${brl(c.amount)}</div>
+        <div class="kv"><small>Chave Pix</small><span id="pixKey">${esc(S.cfg.pix || 'O síndico ainda não cadastrou a chave Pix.')}</span></div>
+        <div class="kv"><small>Identificação (coloque na descrição do Pix)</small>${esc(ref)}</div>
+        ${S.cfg.pix ? '<button class="btn soft block" data-act="copyPix" style="margin-bottom:8px">Copiar chave Pix</button>' : ''}
+        <p class="muted small">Depois de pagar, toque em “Já paguei”. O síndico confirma o recebimento e sua situação é atualizada.</p>`,
+      submit:'Já paguei', okMsg:'Aviso enviado ao síndico',
+      onSubmit: () => db.doc('payments/' + uid + '/items/' + c.id).set({ month:c.id, amount:c.amount, status:'aguardando', informedAt:today(), ts:Date.now() }) }); },
+  copyPix(){ const k = S.cfg.pix || ''; if (navigator.clipboard) navigator.clipboard.writeText(k).then(() => toast('Chave copiada'), () => toast('Copie manualmente a chave')); else toast('Copie manualmente a chave'); },
+
+  addCharge(){ if (!needDb()) return; const nm = new Date(); const last = S.charges.slice().sort((a, b) => b.id.localeCompare(a.id))[0];
+    openSheet({ title:'Lançar taxa do mês', note:'A taxa passa a aparecer para todos os moradores.', okMsg:'Taxa lançada',
+      fields:[{k:'month',label:'Mês de referência (AAAA-MM)',type:'month',value:thisMonth(),required:true},{k:'amount',label:'Valor por unidade (R$)',type:'money',required:true,value:last ? String(last.amount).replace('.', ',') : '',placeholder:'0,00'},{k:'due',label:'Vencimento',type:'date',value:today(),required:true}],
+      onSubmit: v => db.doc('charges/' + v.month).set({ amount:v.amount, due:v.due, ts:Date.now() }) }); },
+  delCharge(t){ if (confirm('Excluir a taxa de ' + monthLabel(t.dataset.id) + '?')) run(() => db.doc('charges/' + t.dataset.id).delete(), 'Taxa excluída'); },
+  cfg(){ if (!needDb()) return; openSheet({ title:'Condomínio e Pix', okMsg:'Dados salvos',
+    fields:[{k:'name',label:'Nome do condomínio',value:S.cfg.name || '',required:true},{k:'pix',label:'Chave Pix para recebimento',value:S.cfg.pix || ''}],
+    onSubmit: v => db.doc('config/condo').set({ name:v.name, pix:v.pix }) }); },
+  confirmPay(t){
+    const rid = t.dataset.rid, c = S.charges.find(x => x.id === t.dataset.id), r = S.residents.find(x => x.id === rid); if (!c || !r) return;
+    run(async () => {
+      await db.doc('payments/' + rid + '/items/' + c.id).set({ month:c.id, amount:c.amount, status:'pago', paidAt:today(), ts:Date.now() });
+      await db.doc('ledger/tx_' + rid + '_' + c.id).set({ type:'entrada', desc:'Taxa ' + monthLabel(c.id) + ' — ' + r.unit, amount:c.amount, date:today(), ts:Date.now() });
+      await loadAllPays();
+    }, 'Pagamento confirmado e lançado no caixa'); },
+  rejectPay(t){ const rid = t.dataset.rid; if (!confirm('Recusar este pagamento? A taxa volta a ficar em aberto.')) return;
+    run(async () => { await db.doc('payments/' + rid + '/items/' + t.dataset.id).delete(); await loadAllPays(); }, 'Pagamento recusado'); }
+};
+document.addEventListener('click', e => {
+  const t = e.target.closest('[data-act]'); if (!t) return;
+  const fn = ACT[t.dataset.act]; if (fn) { try { fn(t); } catch(err){ console.error(err); } }
+});
+document.addEventListener('toggle', e => {
+  const d = e.target; if (d && d.dataset && d.dataset.rid){ if (d.open) openRes.add(d.dataset.rid); else openRes.delete(d.dataset.rid); }
+}, true);
+
+/* ---------- inicialização e banco de dados ---------- */
+function listen(key, path, order, map){
+  let q = db.collection(path); if (order) q = q.orderBy(order[0], order[1]);
+  q.onSnapshot(s => { S[key] = s.docs.map(map || (d => ({ id:d.id, ...d.data() }))); sched(); }, e => console.error(path, e));
+}
+async function init(){
+  render();
+  try {
+    if (window.claude && window.claude.use){
+      db = await window.claude.use('db');
+      user = await window.claude.use('user');
+    }
+  } catch(e){ console.error(e); }
+  if (user){
+    try { uid = await user.id(); } catch(e){}
+    try { isAdmin = !!(await user.isOwner()) || !!(await user.canEdit()); } catch(e){}
+    try { const cw = await user.can('data.write'); canWrite = cw !== false; } catch(e){}
+  }
+  if (!uid) db = db && null;
+  viewAs = isAdmin ? 'sindico' : 'morador';
+  if (!db){ render(); return; }
+  listen('avisos', 'avisos', ['ts','desc']);
+  listen('notas', 'notas', ['ts','desc']);
+  listen('orcs', 'orcamentos');
+  listen('enquetes', 'enquetes', ['ts','desc']);
+  listen('sugestoes', 'sugestoes', ['ts','desc']);
+  listen('apoios', 'apoios');
+  listen('ledger', 'ledger');
+  listen('charges', 'charges');
+  listen('votes', 'votes', null, d => ({ uid:d.id, data:d.data() }));
+  db.doc('config/condo').onSnapshot(s => { S.cfg = s.exists ? s.data() : {}; sched(); }, e => console.error(e));
+  db.doc('residents/' + uid).onSnapshot(s => { S.me = s.exists ? s.data() : null; sched(); }, e => console.error(e));
+  db.collection('payments/' + uid + '/items').onSnapshot(s => { S.myPays = s.docs.map(d => ({ id:d.id, ...d.data() })); sched(); }, e => console.error(e));
+  if (isAdmin){
+    let first = true;
+    db.collection('residents').onSnapshot(s => { S.residents = s.docs.map(d => ({ id:d.id, ...d.data() })); if (first){ first = false; loadAllPays(); } sched(); }, e => console.error(e));
+  }
+  render();
+}
+init();
+})();
+</script>
+</body>
+</html>
